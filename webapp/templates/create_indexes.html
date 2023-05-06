@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Neemi  -- Search your Data</title>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <script>
+   var accessToken = '{{ user_profile.access_token }}';
+  </script>
+
+  <script src="/static/app.js"></script>
+
+  <link rel="stylesheet" href="/static/style.css" />
+ </head>
+
+ <body>
+    <h1><a href="/">Neemi -- Indexing your Data</a></h1>
+    {% if request.user.is_authenticated %}
+    {user : {{request.user.username }}}
+<br>
+    {authenticated services :
+    {%for sservice in request.user.services%}
+      {{sservice}}
+    {% endfor %}
+    }
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+
+    <br/><br/><br/>
+
+    <p>{{msg}}</p>
+
+
+    <br/><br/><br/>
+    {% if status %} 
+        <form action="/create_indexes/" method="post">{% csrf_token %}
+        <input type="submit" name='index_data' value="Indexing data" />
+        <br>
+        <input type="submit" name='delete_pair_index' value="Delete pair index" />
+        <input type="submit" name='delete_key_index' value="Delete key index" />
+        <input type="submit" name='delete_value_index' value="Delete value index" />
+        </form>
+    {% endif %}
+    
+
+    <br><br><br><br>
+
+ 
+
+     <a href="/"> Back to main </a>
+
+<br><br><br>
+    <form action="/logout/" method="post">{% csrf_token %}
+    <input type="submit" value="Log Out" />
+    </form>
+    {% endif %}
+  </body>
+</html>

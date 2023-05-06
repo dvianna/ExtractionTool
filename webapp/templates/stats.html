@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Neemi  -- Statistics</title>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <script>
+   var accessToken = '{{ user_profile.access_token }}';
+  </script>
+  <script src="/static/jqBarGraph.1.1.js"></script>
+  <script src="/static/app.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+ </head>
+
+ <body>
+    <h1><a href="/">Neemi -- Statistics</a></h1>
+    {% if request.user.is_authenticated %}
+    {user : {{request.user.username }}}
+<br>
+    {authenticated services :
+    {%for sservice in request.user.services%}
+      {{sservice}}
+    {% endfor %}
+    }
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+ 
+
+    <br><br><br>
+    
+
+    <div id="divForGraph"></div>
+    <!--<script>
+	    arrayOfData = new Array(
+	    [10.3,'Jan','#f3f3f3'],
+	    [15.2,'Feb','#f4f4f4'],
+	    [13.1,'Mar','#cccccc'],
+	    [16.3,'Apr','#333333'],
+	    [14.5,'May','#666666']
+	    ); 
+	    $('#divForGraph').jqBarGraph({ data: arrayOfData });
+    </script>-->
+    {%for stats in html_stats%}
+        <p>{{stats}}<p>  
+    {% endfor %}
+
+     <br><br><br>
+     <a href="/"> Back to main </a>
+
+    <br><br>
+    <form action="/logout/" method="post">{% csrf_token %}
+    <input type="submit" value="Log Out" />
+    </form>
+
+    {% endif %}
+  </body>
+</html>

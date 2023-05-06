@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Neemi  -- Parse your Data</title>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <script>
+   var accessToken = '{{ user_profile.access_token }}';
+  </script>
+
+  <script src="/static/app.js"></script>
+
+  <link rel="stylesheet" href="/static/style.css" />
+ </head>
+
+ <body>
+    <h1><a href="/">Neemi -- Parse your Data</a></h1>
+    {% if request.user.is_authenticated %}
+    {user : {{request.user.username }}}
+    <br>
+    {authenticated services :
+    {%for sservice in request.user.services%}
+      {{sservice}}
+    {% endfor %}
+    }
+    {% endif %}
+
+
+    {% if request.user.is_authenticated %}
+    <br><br><br>
+    <p>Parse Data from these services:</p>
+    <form action="/parse_data/" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="parse_data_service" value="Parse data" />
+    </form>
+<!--    <br>
+    <p> OR </p>
+    <br>
+    <form action="/parse_data/" method="post">{% csrf_token %}
+    <input type="submit" name="parse_all_data" value="Parse ALL data" /> -->
+    </form>
+    {% endif %}
+
+
+    <br><br><br>
+    <a href="/"> Back to main </a>
+
+
+    {% if request.user.is_authenticated %}
+    <br><br><br>
+    <form action="/logout/" method="post">{% csrf_token %}
+    <input type="submit" value="Log Out" />
+    </form>
+    {% endif %}
+
+  </body>
+</html>

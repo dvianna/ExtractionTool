@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Neemi  -- Search your Data</title>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <script>
+   var accessToken = '{{ user_profile.access_token }}';
+  </script>
+   <script type="text/javascript">
+	function pretty()
+	{
+	   document.getElementById("json").innerHTML = JSON.stringify(document.getElementById("json").innerHTML);
+	 
+	}
+  </script>
+  <script src="/static/app.js"></script>
+
+  <link rel="stylesheet" href="/static/style.css" />
+ </head>
+
+ <body>
+    <h1><a href="/">Neemi -- Search your Data</a></h1>
+    {% if request.user.is_authenticated %}
+    	{user : {{request.user.username }}}
+    <br>
+    	{authenticated services :
+    		{%for sservice in request.user.services%}
+      			{{sservice}}
+    		{% endfor %}
+        }
+	{%if request.user.plaid_services %}
+	    <br>
+	    {plaid services :
+		{%for pservice in request.user.plaid_services%}
+			{{pservice}}
+		{% endfor %}
+	    }
+	  {% endif %}
+
+    {% endif %}
+
+ 
+     <p>Search this service:</p>
+    <form action="/search/" method="post"> {% csrf_token %}
+      {{ forms.management_form }}
+	{% for form in forms.forms %}
+	{{form.service }}
+        {{form.data_type }}
+    <br>
+From:
+<br>
+	Year: {{form.fromYear }}
+	Month: {{form.fromMonth }}
+        Day: {{form.fromDay }}
+     <br>
+Until:
+    <br>
+	Year: {{form.tillYear }}
+	Month: {{form.tillMonth }}
+        Day: {{form.tillDay }}
+     <br>
+Limit:    
+     <br>
+	From: {{form.fromResult }}
+	Until: {{form.untilResult }}
+	{% endfor %}
+     	<input type="submit" name="search_and"  value="Search" /><br><br>
+
+     <br>
+	{%for doc in results%}
+        <p id="json", onchange="pretty()">	
+              {{doc}}
+	</p>
+	<br> 
+    {% endfor %} 
+
+     </form> 
+
+	   <br>
+      <a href=./index.html>
+
+ 
+
+     <a href="/"> Back to main </a>
+
+    
+
+<br><br><br>
+    <form action="/logout/" method="post">{% csrf_token %}
+    <input type="submit" value="Log Out" />
+    </form>
+  </body>
+</html>
